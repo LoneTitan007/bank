@@ -1,60 +1,71 @@
 package com.common.bank.service;
 
 import com.common.bank.dto.AccountCreateRequest;
+import com.common.bank.dto.AccountCreationResponse;
 import com.common.bank.dto.AccountResponse;
+import com.common.bank.exception.AccountAlreadyExistsException;
+import com.common.bank.exception.AccountNotFoundException;
 import com.common.bank.model.Account;
 import com.common.bank.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class AccountService {
-    
+
     private final AccountRepository accountRepository;
-    
-    public void createAccount(AccountCreateRequest request) {
+
+    public AccountCreationResponse createAccount(AccountCreateRequest request) {
+        log.info("Creating account with ID: {}", request.getAccountId());
+
         // Check if account already exists
-        if (accountRepository.findByRefId(request.getAccountId().toString()).isPresent()) {
-            throw new IllegalArgumentException("Account with ID " + request.getAccountId() + " already exists");
+        if (accountRepository.findByRefId(request.getAccountId()).isPresent()) {
+            log.warn("Account creation failed - Account with ID {} already exists", request.getAccountId());
+            throw new AccountAlreadyExistsException(request.getAccountId());
         }
-        
-        // Validate balance
+
         try {
-            BigDecimal balance = new BigDecimal(request.getInitialBalance());
-            if (balance.compareTo(BigDecimal.ZERO) < 0) {
-                throw new IllegalArgumentException("Initial balance cannot be negative");
-            }
-            
             // Create and save account
             Account account = new Account();
-            account.setRefId(request.getAccountId().toString());
-            account.setBalance(balance.doubleValue());
-            
+            account.setRefId(request.getAccountId());
+            account.setBalance(request.getInitialBalance());
+
             accountRepository.save(account);
+            log.info("Account {} created successfully with balance: {}", request.getAccountId(), request.getInitialBalance());
             
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid balance format: " + request.getInitialBalance());
+            return new AccountCreationResponse(
+                    account.getRefId(),
+                    account.getBalance());
+        } catch (Exception e) {
+            log.error("Failed to create account {}: {}", request.getAccountId(), e.getMessage());
+            throw new RuntimeException("Failed to create account due to database error: " + e.getMessage(), e);
         }
     }
-    
+
     @Transactional(readOnly = true)
-    public AccountResponse getAccount(Long accountId) {
-        Optional<Account> accountOpt = accountRepository.findByRefId(accountId.toString());
-        
+    public AccountResponse getAccount(String accountId) {
+        log.debug("Retrieving account with ID: {}", accountId);
+
+        Optional<Account> accountOpt = accountRepository.findByRefId(accountId);
+
         if (accountOpt.isEmpty()) {
-            throw new IllegalArgumentException("Account with ID " + accountId + " not found");
+            log.warn("Account with ID {} not found", accountId);
+            throw new AccountNotFoundException(accountId.toString());
         }
-        
+
         Account account = accountOpt.get();
+        log.debug("Account {} retrieved successfully with balance: {}", accountId, account.getBalance());
+
         return new AccountResponse(
-            Long.valueOf(account.getRefId()),
-            account.getBalance().toString()
+                account.getRefId(),
+                account.getBalance()
         );
     }
 }
