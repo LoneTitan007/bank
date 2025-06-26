@@ -44,6 +44,9 @@ A comprehensive Spring Boot-based banking service that provides account manageme
    createdb banking_service
    
    # Update application.properties with your database credentials
+   spring.datasource.url=jdbc:postgresql://localhost:5432/bank
+   spring.datasource.username=postgres
+   spring.datasource.password=postgres
    ```
 
 3. **Build the application**
@@ -195,9 +198,6 @@ The test suite includes **17 comprehensive tests** covering:
 - ❌ Source account not found handling (returns 200 with FAILED status)
 - ❌ Transaction not found scenarios (returns 500 or 404)
 - ✅ Multiple transactions from same account
-
-#### ✅ Business Logic (1 test)
-- Complex multi-transaction scenarios with balance tracking
 
 ### Sample Test Output
 
