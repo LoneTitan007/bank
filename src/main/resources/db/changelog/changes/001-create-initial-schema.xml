@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="001" author="vaibhav.jindal">
+        <comment>Create initial tables for bank application</comment>
+        
+        <!-- Create account table -->
+        <createTable tableName="account">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ref_id" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="balance" type="DOUBLE PRECISION">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <!-- Create transaction table -->
+        <createTable tableName="transaction">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ref_id" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="source_account_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_account_ref_id" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="destination_account_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="destination_account_ref_id" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="DOUBLE PRECISION">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <!-- Add indexes on ref_id fields -->
+        <createIndex indexName="idx_account_ref_id" tableName="account">
+            <column name="ref_id"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_transaction_ref_id" tableName="transaction">
+            <column name="ref_id"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_source_account_ref_id" tableName="transaction">
+            <column name="source_account_ref_id"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_destination_account_ref_id" tableName="transaction">
+            <column name="destination_account_ref_id"/>
+        </createIndex>
+        
+        <!-- Add foreign key constraints -->
+        <addForeignKeyConstraint baseTableName="transaction"
+                                 baseColumnNames="source_account_id"
+                                 constraintName="fk_source_account"
+                                 referencedTableName="account"
+                                 referencedColumnNames="id"/>
+                                 
+        <addForeignKeyConstraint baseTableName="transaction"
+                                 baseColumnNames="destination_account_id"
+                                 constraintName="fk_destination_account"
+                                 referencedTableName="account"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    
+</databaseChangeLog>
