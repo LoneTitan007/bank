@@ -9,7 +9,7 @@ public class InvalidBalanceException extends BankingException {
         super("INVALID_BALANCE", message);
     }
     
-    public static InvalidBalanceException negativeBalanceException(double balance) {
-        return new InvalidBalanceException("Initial balance cannot be negative: " + balance);
+    public static InvalidBalanceException nonPositiveBalanceException(double balance) {
+        return new InvalidBalanceException("Initial balance cannot be non positive: " + balance);
     }
 }

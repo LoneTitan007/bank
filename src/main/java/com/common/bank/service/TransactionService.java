@@ -244,4 +244,28 @@ public class TransactionService {
             transaction.getErrorMessage()
         );
     }
+    
+    @Transactional(readOnly = true)
+    public TransactionResponse getTransactionById(String transactionId) {
+        log.debug("Retrieving transaction with ID: {}", transactionId);
+        
+        Optional<Transaction> transactionOpt = transactionRepository.findByRefId(transactionId);
+        
+        if (transactionOpt.isEmpty()) {
+            log.warn("Transaction with ID {} not found", transactionId);
+            throw new TransactionNotFoundException(transactionId);
+        }
+        
+        Transaction transaction = transactionOpt.get();
+        log.debug("Transaction {} retrieved successfully with status: {}", transactionId, transaction.getStatus());
+        
+        return new TransactionResponse(
+            transaction.getRefId(),
+            transaction.getSourceAccountRefId(),
+            transaction.getDestinationAccountRefId(),
+            transaction.getAmount(),
+            transaction.getStatus().getValue(),
+            transaction.getErrorMessage()
+        );
+    }
 }
