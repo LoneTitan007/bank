@@ -2,6 +2,7 @@ package com.common.bank.controller;
 
 import com.common.bank.dto.TransactionRequest;
 import com.common.bank.dto.TransactionResponse;
+import com.common.bank.exception.TransactionNotFoundException;
 import com.common.bank.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ public class TransactionController {
         try {
             TransactionResponse response = transactionService.getTransaction(transactionId);
             return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
+        } catch (TransactionNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

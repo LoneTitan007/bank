@@ -1,0 +1,154 @@
+{
+	"info": {
+		"_postman_id": "64842d1c-6215-4208-9633-8894d8493171",
+		"name": "Bank Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21832106",
+		"_collection_link": "https://speeding-meteor-627628.postman.co/workspace/Team-Workspace~30253c1b-ccbc-4da9-8368-c14ea9989521/collection/21832106-64842d1c-6215-4208-9633-8894d8493171?action=share&source=collection_link&creator=21832106"
+	},
+	"item": [
+		{
+			"name": "Test Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/test/ping",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"test",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"account_id\": \"12123\",\n    \"initial_balance\": 2\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Account",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/accounts/123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"source_account_id\": \"TEST_ACCs_1750941875_9681\",\n    \"destination_account_id\": \"TEST_ACwC_1750941875_9347\",\n    \"amount\": 1\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Request Copy",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"source_account_id\": \"123\",\n    \"destination_account_id\": \"456\",\n    \"amount\": 50.50\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/transactions/0e60ffa6-a8b9-492b-9707-c5ae5af5f11",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transactions",
+						"0e60ffa6-a8b9-492b-9707-c5ae5af5f11"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
