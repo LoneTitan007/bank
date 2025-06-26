@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Index;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
        })
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Account extends BaseEntity {
 
     @Column(name = "ref_id", nullable = false, unique = true, length = 50)
