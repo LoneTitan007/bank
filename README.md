@@ -146,16 +146,111 @@ GET /test/ping
 
 ## 🧪 Testing
 
-### Unit Tests
+### Automated Business Logic Testing
 
-Run Java unit tests:
+The project includes a comprehensive Python test script (`test_banking_service.py`) that validates all business logic without relying on Swagger/OpenAPI documentation:
+
+```bash
+# Install Python dependencies
+pip install requests
+
+# Run all tests against default URL (http://localhost:8080)
+python3 test_banking_service.py
+
+# Run tests against different URL
+python3 test_banking_service.py --url http://localhost:9090
+```
+
+### Test Script Features
+
+- **17 Comprehensive Tests** covering all API endpoints
+- **Real-time Results** with emoji indicators and timing
+- **Detailed Reporting** with success rates and failure analysis
+- **Resource Tracking** of created accounts and transactions
+- **CI/CD Integration** with proper exit codes
+- **Flexible Configuration** with custom URL support
+
+### Test Coverage
+
+The test suite includes **17 comprehensive tests** covering:
+
+#### ✅ Service Health (1 test)
+- Health check endpoint validation (`GET /test/ping`)
+
+#### ✅ Account Management (7 tests)
+- ✅ Account creation with valid data (positive balance required)
+- ✅ Account retrieval by ID
+- ❌ Negative balance validation (returns 400 with VALIDATION_ERROR)
+- ❌ Zero balance validation (returns 400 with INVALID_BALANCE)
+- ❌ Missing account ID validation (returns 400)
+- ❌ Duplicate account prevention (returns 409 with ACCOUNT_ALREADY_EXISTS)
+- ❌ Account not found scenarios (returns 404)
+
+#### ✅ Transaction Processing (8 tests)
+- ✅ Successful transaction processing (returns 200 with COMPLETED status)
+- ✅ Transaction retrieval by ID
+- ❌ Insufficient balance handling (returns 200 with FAILED status and transaction ID)
+- ❌ Negative amount validation (returns 400 with VALIDATION_ERROR)
+- ❌ Same account transfer prevention (returns 200 with FAILED status)
+- ❌ Source account not found handling (returns 200 with FAILED status)
+- ❌ Transaction not found scenarios (returns 500 or 404)
+- ✅ Multiple transactions from same account
+
+#### ✅ Business Logic (1 test)
+- Complex multi-transaction scenarios with balance tracking
+
+### Sample Test Output
+
+```
+🏦 Banking Service Business Logic Test Suite
+============================================================
+Test started at: 2025-06-26 18:14:35
+Target service: http://localhost:8080
+
+✅ Service Health Check: Service is healthy (0.007s)
+✅ Account Creation - Success: Account TEST_ACC_1750941875_9347 created successfully (0.014s)
+✅ Transaction Processing - Success: Transaction completed successfully: acbe7651-2fd0-4769-8cc9-96aba049755c (0.022s)
+✅ Transaction - Insufficient Balance: Failed transaction recorded: 6b825ee2-fafe-45a3-aa45-5d8dd75c7b7a (0.019s)
+
+============================================================
+📊 TEST SUMMARY
+============================================================
+Total Tests: 17
+✅ Passed: 17
+❌ Failed: 0
+⏭️  Skipped: 0
+Success Rate: 100.0%
+Total Duration: 0.210s
+
+Test completed at: 2025-06-26 18:14:37
+Created test accounts: 2
+Created test transactions: 6
+```
+
+### Key Testing Features
+
+- **Failed Transaction Recording**: Tests validate that failed transactions are saved to database with complete audit trail
+- **Status Code Validation**: Ensures proper HTTP status codes (200, 400, 404, 409)
+- **Error Message Validation**: Verifies custom exception handling and error codes
+- **Business Rule Testing**: Validates account balance requirements, transaction limits, and validation rules
+- **Resource Management**: Tracks and reports all created test data for cleanup
+
+### Java Unit Tests
+
+Run comprehensive Java unit tests:
 ```bash
 mvn test
 ```
 
-The project includes comprehensive unit tests for:
-- **AccountService**: 9 test cases covering all scenarios
-- **TransactionService**: 14 test cases with Mockito integration
+The project includes **23 unit tests** for service layer components:
+- **AccountService**: 9 test cases covering account creation, validation, and retrieval
+- **TransactionService**: 14 test cases with Mockito integration for transaction processing
+
+**Unit Test Features:**
+- **Mockito Integration**: Full mocking of repository dependencies
+- **Comprehensive Coverage**: Success, validation, business rule, and system error scenarios
+- **Fast Execution**: Pure unit tests with mocked dependencies
+- **Deterministic Results**: Consistent test outcomes without database dependencies
 
 ## 🏛️ Business Rules
 
