@@ -29,13 +29,7 @@
             <column name="ref_id" type="VARCHAR(50)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="source_account_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
             <column name="source_account_ref_id" type="VARCHAR(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="destination_account_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="destination_account_ref_id" type="VARCHAR(50)">
@@ -68,16 +62,16 @@
         
         <!-- Add foreign key constraints -->
         <addForeignKeyConstraint baseTableName="transaction"
-                                 baseColumnNames="source_account_id"
+                                 baseColumnNames="source_account_ref_id"
                                  constraintName="fk_source_account"
                                  referencedTableName="account"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="ref_id"/>
                                  
         <addForeignKeyConstraint baseTableName="transaction"
-                                 baseColumnNames="destination_account_id"
+                                 baseColumnNames="destination_account_ref_id"
                                  constraintName="fk_destination_account"
                                  referencedTableName="account"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="ref_id"/>
     </changeSet>
     
 </databaseChangeLog>

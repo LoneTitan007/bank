@@ -1,7 +1,9 @@
 package com.common.bank.model;
 
+import com.common.bank.enums.TransactionStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -13,21 +15,14 @@ import lombok.NoArgsConstructor;
        })
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Transaction extends BaseEntity {
 
     @Column(name = "ref_id", nullable = false, unique = true, length = 50)
     private String refId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "source_account_id", nullable = false)
-    private Account sourceAccount;
-
     @Column(name = "source_account_ref_id", nullable = false)
     private String sourceAccountRefId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "destination_account_id", nullable = false)
-    private Account destinationAccount;
 
     @Column(name = "destination_account_ref_id", nullable = false)
     private String destinationAccountRefId;
@@ -35,6 +30,10 @@ public class Transaction extends BaseEntity {
     @Column(nullable = false)
     private Double amount;
 
-    @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private TransactionStatus status;
+
+    @Column(name = "error_message", length = 500)
+    private String errorMessage;
 }

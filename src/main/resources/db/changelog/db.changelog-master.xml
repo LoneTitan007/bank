@@ -7,5 +7,6 @@
 
     <!-- Include all changelog files -->
     <include file="db/changelog/changes/001-create-initial-schema.xml"/>
+    <include file="db/changelog/changes/002-add-error-message-column.xml"/>
     
 </databaseChangeLog>
