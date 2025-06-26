@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.common.bank.enums.TransactionStatus.COMPLETED;
@@ -25,9 +24,9 @@ public class TransactionController {
         TransactionResponse response = transactionService.processTransaction(request);
         
         // Check if transaction was successful or failed
-        if (COMPLETED.equals(response.getStatus())) {
+        if (COMPLETED.name().equals(response.getStatus())) {
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } else if (FAILED.equals(response.getStatus())) {
+        } else if (FAILED.name().equals(response.getStatus())) {
             // Return failed transaction details with 400 status
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } else {

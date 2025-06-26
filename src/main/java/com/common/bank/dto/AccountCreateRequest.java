@@ -1,13 +1,12 @@
 package com.common.bank.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PositiveOrZero;
 
 @Data
 @NoArgsConstructor
@@ -20,6 +19,6 @@ public class AccountCreateRequest {
     
     @JsonProperty("initial_balance")
     @NotNull(message = "Initial balance cannot be null")
-    @PositiveOrZero(message = "Initial balance cannot be negative")
+    @Positive(message = "Initial balance must be positive")
     private Double initialBalance;
 }
