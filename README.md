@@ -51,7 +51,7 @@ A comprehensive Spring Boot-based banking service that provides account manageme
 
 3. **Build the application**
    ```bash
-   mvn clean install
+   mvn clean install -U
    ```
 
 4. **Run the application**

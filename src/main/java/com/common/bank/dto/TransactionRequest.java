@@ -1,11 +1,12 @@
 package com.common.bank.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +22,7 @@ public class TransactionRequest {
     private String destinationAccountId;
     
     @JsonProperty("amount")
-    @PositiveOrZero(message = "Transaction amount cannot be negative")
+    @NotNull(message = "Amount cannot be non positive")
+    @Positive(message = "Transaction amount cannot be non positive")
     private Double amount;
 }

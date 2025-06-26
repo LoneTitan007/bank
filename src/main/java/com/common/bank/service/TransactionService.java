@@ -11,11 +11,11 @@ import com.common.bank.model.Account;
 import com.common.bank.model.Transaction;
 import com.common.bank.repository.AccountRepository;
 import com.common.bank.repository.TransactionRepository;
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -59,9 +59,21 @@ public class TransactionService {
     
     private void validateTransaction(TransactionRequest request, String transactionRefId) {
         Double transactionAmount = request.getAmount();
+        if (transactionAmount == null) {
+            log.warn("Transaction {} failed - Amount cannot be null", transactionRefId);
+            throw InvalidTransactionException.nullAmountException();
+        }
+        if (StringUtils.isEmpty(request.getSourceAccountId())) {
+            log.warn("Transaction {} failed - Source account id cannot be null", transactionRefId);
+            throw new AccountNotFoundException("Source account id cannot be null");
+        }
+        if (StringUtils.isEmpty(request.getDestinationAccountId())) {
+            log.warn("Transaction {} failed - Destination account id cannot be null or empty", transactionRefId);
+            throw new AccountNotFoundException("Destination account id cannot be null or empty");
+        }
         if (transactionAmount <= 0) {
             log.warn("Transaction {} failed - Amount must be positive: {}", transactionRefId, request.getAmount());
-            throw InvalidTransactionException.invalidAmountException(request.getAmount());
+            throw InvalidTransactionException.nonPositiveAmountException(request.getAmount());
         }
         log.debug("Transaction {} - Amount validated: {}", transactionRefId, transactionAmount);
     }
