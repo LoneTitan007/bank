@@ -22,7 +22,7 @@ public class TransactionRequest {
     private String destinationAccountId;
     
     @JsonProperty("amount")
-    @NotNull(message = "Amount cannot be non positive")
+    @NotNull(message = "Amount cannot be null")
     @Positive(message = "Transaction amount cannot be non positive")
     private Double amount;
 }
